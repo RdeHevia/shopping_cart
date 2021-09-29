@@ -36,6 +36,7 @@ const Product = ({ id, title, quantity, price, onUpdate }) => {
             quantity={quantity}
             price={price}
             onUpdate={onUpdate}
+            setIsEditFormHidden={setIsEditFormHidden}
           />
         )}
         <a className="delete-button">

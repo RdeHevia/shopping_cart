@@ -14,24 +14,6 @@ import AddProductButton from "./AddProductButton";
   - (FUTURE) recycle the component (same form for add and edit product)
 */
 
-/*
-  {
-  "title": "string",
-  "price": 0,
-  "quantity": 0
-}
-*/
-
-// {
-//   /* <AddForm
-//  X onCancelClick={handleHideAddProductForm}
-// isHidden={isAddProductFormHidden}
-// onShowAddProduct={handleShowAddProductForm}
-// onSubmit={handleFormSubmission}
-
-// /> */
-// }
-
 const AddForm = ({ onFormSubmission }) => {
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");

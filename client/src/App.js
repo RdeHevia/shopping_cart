@@ -56,6 +56,7 @@ const App = () => {
   };
 
   const handleUpdateProduct = async (updatedProductData, callback) => {
+    console.log(updatedProductData);
     try {
       const response = await axios.put(
         `/api/products/${updatedProductData.id}`,
@@ -64,17 +65,30 @@ const App = () => {
         }
       );
       const updatedProduct = response.data;
+      console.log(updatedProduct);
+      updateProduct(updatedProduct);
 
-      updateProduct(updateProduct);
-      // if (callback) {
-      //   callback();
-      // }
+      if (callback) {
+        callback();
+      }
     } catch (e) {
       console.log(e);
     }
   };
 
-  const updateProduct = (updatedProduct) => {};
+  const updateProduct = (updatedProduct) => {
+    console.log("before", products);
+    console.log("updatedProduct", updatedProduct);
+    const updatedProducts = products.map((product) => {
+      if (product._id === updatedProduct._id) {
+        return updatedProduct;
+      }
+
+      return product;
+    });
+    console.log("end", updatedProducts);
+    setProducts([...updatedProducts]);
+  };
 
   const deleteProduct = (id) => {};
 

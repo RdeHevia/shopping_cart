@@ -7,11 +7,11 @@ const Products = (props) => {
       {props.products.map((product) => {
         return (
           <Product
-            id={product.id}
+            id={product._id}
             title={product.title}
             quantity={product.quantity}
             price={product.price}
-            onUpdate={product.onUpdate}
+            onUpdate={props.onUpdate}
           />
         );
       })}
