@@ -24,6 +24,10 @@ get the details of the cart working:
     decrementing quantity AT CHECKOUT, not when we add to cart
     once there are 0 items left, disable add to cart button
 
+DELETE - 
+   When the X span is clicked:
+   1) DELETE request
+   2) reset products state, removing the deleted product by id
 */
 
 const App = () => {
@@ -90,13 +94,19 @@ const App = () => {
     setProducts([...updatedProducts]);
   };
 
+  const handleDelete = () => {};
+
   const deleteProduct = (id) => {};
 
   return (
     <div id="app">
       <Header />
       <main>
-        <Products products={products} onUpdate={handleUpdateProduct} />
+        <Products
+          products={products}
+          onUpdate={handleUpdateProduct}
+          handleXClick={handleDelete}
+        />
         <AddForm onFormSubmission={handleFormSubmission} />
       </main>
     </div>

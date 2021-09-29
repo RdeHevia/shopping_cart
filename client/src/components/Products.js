@@ -12,6 +12,7 @@ const Products = (props) => {
             quantity={product.quantity}
             price={product.price}
             onUpdate={props.onUpdate}
+            handleXClick={props.handleXClick}
           />
         );
       })}

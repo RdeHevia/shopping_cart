@@ -13,7 +13,7 @@ X EDIT button onClick: setIsHidden === false
   - setProducts(...mappedProducts)
 - CANCEL button onClick: setIsHidden(true)
 */
-const Product = ({ id, title, quantity, price, onUpdate }) => {
+const Product = ({ id, title, quantity, price, onUpdate, handleXClick }) => {
   const [isEditFormHidden, setIsEditFormHidden] = useState(true);
 
   console.log(id, title, quantity, price);
@@ -40,7 +40,7 @@ const Product = ({ id, title, quantity, price, onUpdate }) => {
           />
         )}
         <a className="delete-button">
-          <span>X</span>
+          <span onClick={handleXClick}>X</span>
         </a>
       </div>
     </div>
