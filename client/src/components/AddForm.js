@@ -22,37 +22,51 @@ import AddProductButton from "./AddProductButton";
 }
 */
 
-const AddForm = ({ isHidden, onShowAddProduct, onCancelClick, onSubmit }) => {
-  const [productName, setProductName] = useState("");
+// {
+//   /* <AddForm
+//  X onCancelClick={handleHideAddProductForm}
+// isHidden={isAddProductFormHidden}
+// onShowAddProduct={handleShowAddProductForm}
+// onSubmit={handleFormSubmission}
+
+// /> */
+// }
+
+const AddForm = ({ onFormSubmission }) => {
+  const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
 
-  const handleAddProduct = async () => {
-    const response = await axios.post("/api/products", {
-      title: productName,
-      price,
-      quantity,
-    });
+  const [isAddProductFormHidden, setIsAddProductFormHidden] = useState(true);
 
-    const newProduct = response.data;
-    // newProduct = response.data
-    // add the new product to the products array (const [products, setProducts] = useState([]);)
+  // use toggle
+  const handleShowAddProductForm = (event) => {
+    event.preventDefault();
+    setIsAddProductFormHidden(false);
   };
-  // WE ARE HERE!!!!!!!!
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   onSubmit({ author, body }, resetInputs);
-  // };
 
-  // const resetInputs = () => {
-  //   setAuthor("");
-  //   setBody("");
-  // };
+  const handleHideAddProductForm = (event) => {
+    event.preventDefault();
+    setIsAddProductFormHidden(true);
+  };
+
+  const handleSubmit = (e) => {
+    console.log("hi");
+    e.preventDefault();
+    onFormSubmission({ title, price, quantity }, resetInputs); // onFormSubmission
+  };
+
+  const resetInputs = () => {
+    setTitle("");
+    setPrice("");
+    setQuantity("");
+    setIsAddProductFormHidden(true);
+  };
 
   return (
-    <div className={isHidden ? "add-form" : "add-form visible"}>
+    <div className={isAddProductFormHidden ? "add-form" : "add-form visible"}>
       <p>
-        <AddProductButton onClick={onShowAddProduct} />
+        <AddProductButton onClick={handleShowAddProductForm} />
       </p>
       <h3>Add Product</h3>
       <form>
@@ -61,8 +75,8 @@ const AddForm = ({ isHidden, onShowAddProduct, onCancelClick, onSubmit }) => {
           <input
             type="text"
             id="product-name"
-            value={productName}
-            onChange={(e) => setProductName(e.target.value)}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
           />
         </div>
 
@@ -87,10 +101,10 @@ const AddForm = ({ isHidden, onShowAddProduct, onCancelClick, onSubmit }) => {
         </div>
 
         <div className="actions form-actions">
-          <a className="button" onClick={handleAddProduct}>
+          <a className="button" onClick={handleSubmit}>
             Add
           </a>
-          <a className="button" onClick={onCancelClick}>
+          <a className="button" onClick={handleHideAddProductForm}>
             Cancel
           </a>
         </div>

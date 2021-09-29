@@ -11,6 +11,7 @@ const Products = (props) => {
             title={product.title}
             quantity={product.quantity}
             price={product.price}
+            onUpdate={product.onUpdate}
           />
         );
       })}
