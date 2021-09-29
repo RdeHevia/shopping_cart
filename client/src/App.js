@@ -18,7 +18,8 @@ X Add product form -> send a POST request to backend API
 finish up all the CRUD operations
      CREATE - done
      READ - done
-     UPDATE - 
+     UPDATE - done
+     DELETE - done
 get the details of the cart working:
     you can't add more items than are left in stock
     decrementing quantity AT CHECKOUT, not when we add to cart
@@ -28,10 +29,13 @@ DELETE -
    When the X span is clicked:
    1) DELETE request
    2) reset products state, removing the deleted product by id
+
+
 */
 
 const App = () => {
   const [products, setProducts] = useState([]);
+  const [cart, setCart] = useState([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -43,6 +47,18 @@ const App = () => {
       }
     };
     fetchProducts();
+  }, []);
+
+  useEffect(() => {
+    const fetchCart = async () => {
+      try {
+        const response = await axios.get("/api/cart");
+        setCart(response.data);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    fetchCart();
   }, []);
 
   const handleFormSubmission = async (newProductData, callback) => {
@@ -94,18 +110,33 @@ const App = () => {
     setProducts([...updatedProducts]);
   };
 
-  const handleDelete = () => {};
+  const handleDeleteProduct = async (id, callback) => {
+    try {
+      const response = await axios.delete(`/api/products/${id}`);
+      deleteProduct(id);
 
-  const deleteProduct = (id) => {};
+      if (callback) {
+        callback();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const deleteProduct = (id) => {
+    setProducts((products) => products.filter((product) => product._id !== id));
+  };
 
   return (
     <div id="app">
-      <Header />
+      <Header cart={cart} />
       <main>
         <Products
           products={products}
           onUpdate={handleUpdateProduct}
-          handleXClick={handleDelete}
+          handleXClick={handleDeleteProduct}
+          cart={cart}
+          setCart={setCart}
         />
         <AddForm onFormSubmission={handleFormSubmission} />
       </main>

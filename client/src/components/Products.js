@@ -13,6 +13,8 @@ const Products = (props) => {
             price={product.price}
             onUpdate={props.onUpdate}
             handleXClick={props.handleXClick}
+            cart={props.cart}
+            setCart={props.setCart}
           />
         );
       })}
