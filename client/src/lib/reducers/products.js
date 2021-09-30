@@ -5,9 +5,13 @@ const products = (state = [], action) => {
     case types.PRODUCTS_RECEIVED: {
       return action.payload.products;
     }
+
     case types.PRODUCT_CREATED: {
+      return [...state, action.payload.product];
     }
+
     case types.PRODUCT_UPDATED: {
+      const rest = state.filter((product) => {});
     }
     case types.PRODUCT_DELETED: {
     }

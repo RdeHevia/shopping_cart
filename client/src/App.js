@@ -28,6 +28,7 @@ const App = () => {
   const [cart, setCart] = useState([]);
   const [stockOrder, setStockOrder] = useState({});
 
+  // DELETE
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -57,6 +58,7 @@ const App = () => {
     fetchCart();
   }, []);
 
+  // DELETE
   const handleFormSubmission = async (newProductData, callback) => {
     try {
       const response = await axios.post("/api/products", { ...newProductData });
