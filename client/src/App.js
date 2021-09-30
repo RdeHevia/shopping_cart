@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 
 import Header from "./components/Header.js";
@@ -7,36 +7,27 @@ import Products from "./components/Products.js";
 import AddForm from "./components/AddForm.js";
 
 /*
-X Fetch product data 
-X Add Product button: onClick -> show the add product form (conditional product) {!isHidden && <Button />}
-X hide add product form 
-      X happens after ADDING a product
-      X also happens after hitting CANCEL
-X Add product form -> send a POST request to backend API
-- hide/show edit product form
+products:
+ - duplicate products state in redux store
+ - start rewiring handlers, functions.... that act on products to products in redux store
+ - finally, remove all duplications
+*/
 
-finish up all the CRUD operations
-     CREATE - done
-     READ - done
-     UPDATE - done
-     DELETE - done
-get the details of the cart working:
-    you can't add more items than are left in stock
-    decrementing quantity AT CHECKOUT, not when we add to cart
-    once there are 0 items left, disable add to cart button
-
-DELETE - 
-   When the X span is clicked:
-   1) DELETE request
-   2) reset products state, removing the deleted product by id
-
-
+/*
+PRODUCTS:
+ - ACTIONS
+  - PRODUCTS_RECEIVED
+  - PRODUCT_CREATED
+  - PRODUCT_DELETED
+  - PRODUCT_UPDATED
+ - reducer
 */
 
 const App = () => {
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState([]);
   const [stockOrder, setStockOrder] = useState({});
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
