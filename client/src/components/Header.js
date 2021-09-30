@@ -13,7 +13,7 @@
 */
 import axios from "axios";
 
-const Cart = ({ cart }) => {
+const Cart = ({ cart, onCheckout }) => {
   const calTotalCost = () => {
     return cart.reduce(
       (sum, product) => sum + product.price * product.quantity,
@@ -21,15 +21,6 @@ const Cart = ({ cart }) => {
     );
   };
 
-  const handleCheckout = async () => {
-    try {
-      await axios.post("/api/cart/checkout");
-      // iterate over products array. for each product:
-      // if product.id ===
-    } catch (e) {
-      console.error(e);
-    }
-  };
   return (
     <>
       <table class="cart-items">
@@ -55,7 +46,10 @@ const Cart = ({ cart }) => {
           </tr>
         </tbody>
       </table>
-      <a class={`button checkout ${cart.length === 0 ? "disabled" : ""}`}>
+      <a
+        class={`button checkout ${cart.length === 0 ? "disabled" : ""}`}
+        onClick={onCheckout}
+      >
         Checkout
       </a>
     </>
@@ -72,14 +66,18 @@ const Empty = () => {
   );
 };
 
-const Header = ({ cart }) => {
+const Header = ({ cart, onCheckout }) => {
   return (
     <header>
       <h1>The Shop!</h1>
       <div class="cart">
         <h2>Your Cart</h2>
 
-        {cart.length === 0 ? <Empty /> : <Cart cart={cart} />}
+        {cart.length === 0 ? (
+          <Empty />
+        ) : (
+          <Cart cart={cart} onCheckout={onCheckout} />
+        )}
       </div>
     </header>
   );

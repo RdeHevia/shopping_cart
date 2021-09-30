@@ -26,6 +26,8 @@ const Product = ({
   handleXClick,
   cart,
   setCart,
+  stockOrder,
+  setStockOrder,
 }) => {
   const [isEditFormHidden, setIsEditFormHidden] = useState(true);
 
@@ -36,21 +38,28 @@ const Product = ({
       price,
     });
     const addedProduct = response.data;
-    const newCart = cart.map((item) => {
-      if (item._id === id) {
-        item.quantity++;
-      }
-      return item;
+
+    setStockOrder({
+      ...stockOrder,
+      [addedProduct.productId]: addedProduct.quantity,
     });
-    /*
-    - addedProduct = response.data
-    - updatedCart: map the original cart. for each product in the cart
-      - if product.
-    */
+
+    const newCart = [...cart];
+    let i = 0;
+    while (i < cart.length) {
+      if (newCart[i].productId === id) {
+        newCart[i] = addedProduct;
+        break;
+      }
+      i++;
+    }
+
+    if (i === cart.length) {
+      newCart.push(addedProduct);
+    }
     setCart(newCart);
   };
 
-  console.log(id, title, quantity, price);
   return (
     <div className="product" key={id}>
       <div className="product-details">

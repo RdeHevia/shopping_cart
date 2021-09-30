@@ -36,7 +36,7 @@ DELETE -
 const App = () => {
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState([]);
-
+  const [stockOrder, setStockOrder] = useState({});
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -53,7 +53,12 @@ const App = () => {
     const fetchCart = async () => {
       try {
         const response = await axios.get("/api/cart");
+        console.log("cart", response.data);
         setCart(response.data);
+        const newStockOrder = response.data.reduce((newStockOrder, item) => {
+          return { ...newStockOrder, [item.productId]: item.quantity };
+        }, {});
+        setStockOrder(newStockOrder);
       } catch (e) {
         console.log(e);
       }
@@ -127,9 +132,31 @@ const App = () => {
     setProducts((products) => products.filter((product) => product._id !== id));
   };
 
+  const handleCheckout = async () => {
+    const updatedProducts = products.map((product) => {
+      const orderedQuantity = stockOrder[product._id] || 0;
+      if (product.quantity > orderedQuantity) {
+        product.quantity -= orderedQuantity;
+        return product;
+      } else {
+        product.quantity = 0;
+        // update stock order pending (EXTRA)
+        // update cart pending (EXTRA)
+        return product;
+      }
+    });
+    try {
+      await axios.post("/api/cart/checkout");
+      setProducts(updatedProducts);
+      setCart([]);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
     <div id="app">
-      <Header cart={cart} />
+      <Header cart={cart} onCheckout={handleCheckout} />
       <main>
         <Products
           products={products}
@@ -137,6 +164,8 @@ const App = () => {
           handleXClick={handleDeleteProduct}
           cart={cart}
           setCart={setCart}
+          stockOrder={stockOrder}
+          setStockOrder={setStockOrder}
         />
         <AddForm onFormSubmission={handleFormSubmission} />
       </main>
