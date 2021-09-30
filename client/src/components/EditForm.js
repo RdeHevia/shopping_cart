@@ -1,5 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { productUpdated } from "../actions/productsActions";
 
 const EditForm = ({
   id,
@@ -12,6 +14,28 @@ const EditForm = ({
   const [updatedTitle, setUpdatedTitle] = useState(title);
   const [updatedPrice, setUpdatedPrice] = useState(quantity);
   const [updatedQuantity, setUpdatedQuantity] = useState(price);
+
+  const dispatch = useDispatch();
+
+  const handleUpdateProduct = async (updatedProductData, callback) => {
+    try {
+      const response = await axios.put(
+        `/api/products/${updatedProductData.id}`,
+        {
+          ...updatedProductData,
+        }
+      );
+      const updatedProduct = response.data;
+
+      // updateProduct(updatedProduct);
+      dispatch(productUpdated(updatedProduct));
+      if (callback) {
+        callback();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const resetInputs = () => {
     setUpdatedTitle("");
@@ -57,7 +81,7 @@ const EditForm = ({
         <div className="actions form-actions">
           <a
             className="button"
-            onClick={() =>
+            onClick={() => {
               onUpdate(
                 {
                   id,
@@ -66,8 +90,17 @@ const EditForm = ({
                   quantity: updatedQuantity,
                 },
                 resetInputs
-              )
-            }
+              );
+              handleUpdateProduct(
+                {
+                  id,
+                  title: updatedTitle,
+                  price: updatedPrice,
+                  quantity: updatedQuantity,
+                },
+                resetInputs
+              );
+            }}
           >
             Update
           </a>

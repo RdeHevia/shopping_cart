@@ -72,7 +72,7 @@ const App = () => {
       console.log(e);
     }
   };
-
+  // DELETE
   const handleUpdateProduct = async (updatedProductData, callback) => {
     console.log(updatedProductData);
     try {
@@ -95,6 +95,7 @@ const App = () => {
   };
 
   const updateProduct = (updatedProduct) => {
+    //DELETE
     console.log("before", products);
     console.log("updatedProduct", updatedProduct);
     const updatedProducts = products.map((product) => {
