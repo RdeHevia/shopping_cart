@@ -1,26 +1,30 @@
 import Product from "./Product.js";
+import React, { useEffect } from "react";
+import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import { productsReceived } from "../actions/productsActions.js";
 
-const Products = (props) => {
-  console.log("products", props.products);
+const Products = () => {
+  const dispatch = useDispatch();
+  const products = useSelector((state) => state.products);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const products = (await axios.get("/api/products")).data;
+        dispatch(productsReceived(products));
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    fetchProducts();
+  }, []);
+
   return (
     <div className="product-listing">
       <h2>Products</h2>
-      {props.products.map((product) => {
-        console.log("product", product);
-        return (
-          <Product
-            id={product._id}
-            title={product.title}
-            quantity={product.quantity}
-            price={product.price}
-            onUpdate={props.onUpdate}
-            handleXClick={props.handleXClick}
-            cart={props.cart}
-            setCart={props.setCart}
-            setStockOrder={props.setStockOrder}
-            stockOrder={props.stockOrder}
-          />
-        );
+      {products.map((product) => {
+        return <Product id={product._id} />;
       })}
     </div>
   );

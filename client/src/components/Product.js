@@ -1,63 +1,40 @@
 import axios from "axios";
 import { useState } from "react";
 import EditForm from "./EditForm";
+import { useSelector, useDispatch } from "react-redux";
+import { productDeleted } from "../actions/productsActions";
+import { productAddedToCart } from "../actions/cartActions";
 
-/*
-X state: [isHidden, setIsHidden]
-X conditional render EditForm if isHidden === false
-X pass id, title, quantity, price
-X make the form to read from the arguments we just passed (controlled form)
-X EDIT button onClick: setIsHidden === false
-- UPDATE button onClick: 
-  - send a PUT request to api/products/${id}
-  - map products array to replace the old product with the updated product
-  - setProducts(...mappedProducts)
-- CANCEL button onClick: setIsHidden(true)
-
-
-
-*/
-const Product = ({
-  id,
-  title,
-  quantity,
-  price,
-  onUpdate,
-  handleXClick,
-  cart,
-  setCart,
-  stockOrder,
-  setStockOrder,
-}) => {
+const Product = ({ id }) => {
   const [isEditFormHidden, setIsEditFormHidden] = useState(true);
+  const dispatch = useDispatch();
+
+  const product = useSelector((state) =>
+    state.products.filter((product) => product._id === id)
+  )[0];
+  const { title, quantity, price } = product;
 
   const handleAddToCart = async () => {
     const response = await axios.post("/api/cart", {
-      productId: id,
-      title,
-      price,
+      productId: product._id,
+      title: product.title,
+      price: product.price,
     });
+
     const addedProduct = response.data;
 
-    setStockOrder({
-      ...stockOrder,
-      [addedProduct.productId]: addedProduct.quantity,
-    });
-
-    const newCart = [...cart];
-    let i = 0;
-    while (i < cart.length) {
-      if (newCart[i].productId === id) {
-        newCart[i] = addedProduct;
-        break;
+    dispatch(productAddedToCart(addedProduct));
+  };
+  const handleDeleteProduct = async (id, callback) => {
+    try {
+      const response = await axios.delete(`/api/products/${id}`);
+      dispatch(productDeleted(id));
+      if (callback) {
+        callback();
       }
-      i++;
+    } catch (e) {
+      console.log(e);
     }
-
-    if (i === cart.length) {
-      newCart.push(addedProduct);
-    }
-    setCart(newCart);
   };
 
   return (
@@ -67,7 +44,12 @@ const Product = ({
         <p className="price">${price}</p>
         <p className="quantity">{quantity} left in stock</p>
         <div className="actions product-actions">
-          <a className="button add-to-cart" onClick={handleAddToCart}>
+          <a
+            className="button add-to-cart"
+            onClick={() => {
+              handleAddToCart();
+            }}
+          >
             Add to Cart
           </a>
           <a className="button edit" onClick={() => setIsEditFormHidden(false)}>
@@ -80,12 +62,17 @@ const Product = ({
             title={title}
             quantity={quantity}
             price={price}
-            onUpdate={onUpdate}
             setIsEditFormHidden={setIsEditFormHidden}
           />
         )}
         <a className="delete-button">
-          <span onClick={() => handleXClick(id)}>X</span>
+          <span
+            onClick={() => {
+              handleDeleteProduct(id);
+            }}
+          >
+            X
+          </span>
         </a>
       </div>
     </div>

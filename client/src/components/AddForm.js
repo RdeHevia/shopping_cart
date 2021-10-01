@@ -1,7 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
 import AddProductButton from "./AddProductButton";
-
+import { useSelect, useDispatch } from "react-redux";
+import { productCreated } from "../actions/productsActions";
 /*
   X define state: productName, price, quantity
   X handlers to control inputs: onChange={handleBlabla}
@@ -14,12 +15,14 @@ import AddProductButton from "./AddProductButton";
   - (FUTURE) recycle the component (same form for add and edit product)
 */
 
-const AddForm = ({ onFormSubmission }) => {
+const AddForm = () => {
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
 
   const [isAddProductFormHidden, setIsAddProductFormHidden] = useState(true);
+
+  const dispatch = useDispatch();
 
   // use toggle
   const handleShowAddProductForm = (event) => {
@@ -33,9 +36,21 @@ const AddForm = ({ onFormSubmission }) => {
   };
 
   const handleSubmit = (e) => {
-    console.log("hi");
     e.preventDefault();
-    onFormSubmission({ title, price, quantity }, resetInputs); // onFormSubmission
+    handleFormSubmission({ title, price, quantity }, resetInputs);
+  };
+
+  const handleFormSubmission = async (newProductData, callback) => {
+    try {
+      const response = await axios.post("/api/products", { ...newProductData });
+      const newProduct = response.data;
+      dispatch(productCreated(newProduct));
+      if (callback) {
+        callback();
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const resetInputs = () => {
