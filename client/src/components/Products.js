@@ -25,7 +25,6 @@ const Products = (props) => {
     <div className="product-listing">
       <h2>Products</h2>
       {props.products.map((product) => {
-        console.log("product", product);
         return (
           <Product
             id={product._id}

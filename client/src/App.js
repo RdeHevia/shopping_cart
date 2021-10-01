@@ -5,6 +5,7 @@ import axios from "axios";
 import Header from "./components/Header.js";
 import Products from "./components/Products.js";
 import AddForm from "./components/AddForm.js";
+import { checkout } from "./actions/cartActions.js";
 
 /*
 products:
@@ -16,7 +17,7 @@ products:
 /*
 
 STORE FULLY FUNCTIONAL
-1. PRODUCT_DELETED feature
+X 1. PRODUCT_DELETED feature
 2. Create cart action creator, types and reducer
 3. PRODUCT_ADDED_TO_CART feature
 4. CHECKOUT feature
@@ -35,7 +36,8 @@ the app still works while we rewire everything.
 4. App
 
 THUNK REFACTORING (EXTRA):
-1. Move all the code inside useEffect to action creators, one by one
+1. Extract API logic
+2. Move all the code inside useEffect to action creators, one by one
 */
 
 const App = () => {

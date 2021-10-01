@@ -9,7 +9,7 @@ export const productCreated = (newProduct) => {
 };
 
 export const productDeleted = (id) => {
-  return { type: types.PRODUCT_DELETED, payload: { product: id } };
+  return { type: types.PRODUCT_DELETED, payload: { productId: id } };
 };
 
 export const productUpdated = (product) => {

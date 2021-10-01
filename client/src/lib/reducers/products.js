@@ -20,22 +20,18 @@ const products = (state = [], action) => {
       });
     }
     case types.PRODUCT_DELETED: {
+      const newState = state.filter((product) => {
+        return product._id !== action.payload.productId;
+      });
+      return newState;
     }
+
     default:
       return state;
   }
 };
 export default products;
 
-// const updateProduct = (updatedProduct) => {
-
-// const updatedProducts = products.map((product) => {
-//   if (product._id === updatedProduct._id) {
-//     return updatedProduct;
-//   }
-
-//   return product;
-// });
-//   console.log("end", updatedProducts);
-//   setProducts([...updatedProducts]);
+// export const productDeleted = (id) => {
+//   return { type: types.PRODUCT_DELETED, payload: { product: id } };
 // };
