@@ -3,26 +3,14 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCart } from "../actions/cartActions";
 import { checkout } from "../actions/cartActions";
+
 const Cart = ({ cart, onCheckout }) => {
-  const dispatch = useDispatch();
-  // const currentCart = useSelector((state) => state.cart);
   const calTotalCost = () => {
     return cart.reduce(
       (sum, product) => sum + product.price * product.quantity,
       0
     );
   };
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await axios.get("/api/cart");
-        dispatch(fetchCart(response.data));
-      } catch (e) {
-        console.log(e);
-      }
-    })();
-  }, []);
 
   return (
     <>
@@ -69,17 +57,31 @@ const Empty = () => {
   );
 };
 
-const Header = ({ cart, onCheckout }) => {
+const Header = () => {
   const dispatch = useDispatch();
-  const currentCart = useSelector((state) => state.cart);
+  const cart = useSelector((state) => state.cart);
   const handleCheckout = async () => {
     try {
       await axios.post("/api/cart/checkout");
-      dispatch(checkout(currentCart));
+      dispatch(checkout(cart));
     } catch (e) {
       console.error(e);
     }
   };
+
+  useEffect(() => {
+    const getCart = async () => {
+      try {
+        const response = await axios.get("/api/cart");
+        console.log("fetch", response.data);
+        dispatch(fetchCart(response.data));
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    getCart();
+  }, []);
+
   return (
     <header>
       <h1>The Shop!</h1>
@@ -92,7 +94,6 @@ const Header = ({ cart, onCheckout }) => {
           <Cart
             cart={cart}
             onCheckout={() => {
-              onCheckout();
               handleCheckout();
             }}
           />

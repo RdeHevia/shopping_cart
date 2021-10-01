@@ -5,53 +5,16 @@ import { useSelector, useDispatch } from "react-redux";
 import { productDeleted } from "../actions/productsActions";
 import { productAddedToCart } from "../actions/cartActions";
 
-const Product = ({
-  id,
-  title,
-  quantity,
-  price,
-  onUpdate,
-  handleXClick,
-  cart,
-  setCart,
-  stockOrder,
-  setStockOrder,
-}) => {
+const Product = ({ id }) => {
   const [isEditFormHidden, setIsEditFormHidden] = useState(true);
   const dispatch = useDispatch();
+
   const product = useSelector((state) =>
     state.products.filter((product) => product._id === id)
   )[0];
-  // DELETE
+  const { title, quantity, price } = product;
+
   const handleAddToCart = async () => {
-    const response = await axios.post("/api/cart", {
-      productId: id,
-      title,
-      price,
-    });
-    const addedProduct = response.data;
-
-    setStockOrder({
-      ...stockOrder,
-      [addedProduct.productId]: addedProduct.quantity,
-    });
-
-    const newCart = [...cart];
-    let i = 0;
-    while (i < cart.length) {
-      if (newCart[i].productId === id) {
-        newCart[i] = addedProduct;
-        break;
-      }
-      i++;
-    }
-
-    if (i === cart.length) {
-      newCart.push(addedProduct);
-    }
-    setCart(newCart);
-  };
-  const handleAddToCartRedux = async () => {
     const response = await axios.post("/api/cart", {
       productId: product._id,
       title: product.title,
@@ -65,8 +28,6 @@ const Product = ({
   const handleDeleteProduct = async (id, callback) => {
     try {
       const response = await axios.delete(`/api/products/${id}`);
-      // deleteProduct(id);
-      console.log(productDeleted(id));
       dispatch(productDeleted(id));
       if (callback) {
         callback();
@@ -87,7 +48,6 @@ const Product = ({
             className="button add-to-cart"
             onClick={() => {
               handleAddToCart();
-              handleAddToCartRedux();
             }}
           >
             Add to Cart
@@ -102,14 +62,12 @@ const Product = ({
             title={title}
             quantity={quantity}
             price={price}
-            onUpdate={onUpdate}
             setIsEditFormHidden={setIsEditFormHidden}
           />
         )}
         <a className="delete-button">
           <span
             onClick={() => {
-              // handleXClick(id);
               handleDeleteProduct(id);
             }}
           >

@@ -3,14 +3,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { productUpdated } from "../actions/productsActions";
 
-const EditForm = ({
-  id,
-  title,
-  quantity,
-  price,
-  onUpdate,
-  setIsEditFormHidden,
-}) => {
+const EditForm = ({ id, title, quantity, price, setIsEditFormHidden }) => {
   const [updatedTitle, setUpdatedTitle] = useState(title);
   const [updatedPrice, setUpdatedPrice] = useState(quantity);
   const [updatedQuantity, setUpdatedQuantity] = useState(price);
@@ -81,16 +74,6 @@ const EditForm = ({
           <a
             className="button"
             onClick={() => {
-              onUpdate(
-                // delete
-                {
-                  id,
-                  title: updatedTitle,
-                  price: updatedPrice,
-                  quantity: updatedQuantity,
-                },
-                resetInputs
-              );
               handleUpdateProduct(
                 {
                   id,
