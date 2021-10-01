@@ -27,7 +27,6 @@ const EditForm = ({
       );
       const updatedProduct = response.data;
 
-      // updateProduct(updatedProduct);
       dispatch(productUpdated(updatedProduct));
       if (callback) {
         callback();
@@ -83,6 +82,7 @@ const EditForm = ({
             className="button"
             onClick={() => {
               onUpdate(
+                // delete
                 {
                   id,
                   title: updatedTitle,

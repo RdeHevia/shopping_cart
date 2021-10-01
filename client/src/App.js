@@ -14,19 +14,35 @@ products:
 */
 
 /*
-PRODUCTS:
- - ACTIONS
-  - PRODUCTS_RECEIVED
-  - PRODUCT_CREATED
-  - PRODUCT_DELETED
-  - PRODUCT_UPDATED
- - reducer
+
+STORE FULLY FUNCTIONAL
+1. PRODUCT_DELETED feature
+2. Create cart action creator, types and reducer
+3. PRODUCT_ADDED_TO_CART feature
+4. CHECKOUT feature
+
+5. Create stockOrder reducer (reducer processes PRODUCT_ADDED_TO_CART and CHECKOUT actions)
+6. add to stockOrder feature (uses PRODUCT_ADDED_TO_CART action)
+7. clear stockOrder feature (uses CHECKOUT action)
+
+REMOVE REACT STATE:
+Start removing state and any dependencies from children all the way up to App.js. That way we ensure
+the app still works while we rewire everything.
+
+1. AddProductForm
+2. EditForm -> Product -> Products
+3. Cart -> Header
+4. App
+
+THUNK REFACTORING (EXTRA):
+1. Move all the code inside useEffect to action creators, one by one
 */
 
 const App = () => {
+  // DELETE products, cart, stockOrder
   const [products, setProducts] = useState([]);
-  const [cart, setCart] = useState([]);
-  const [stockOrder, setStockOrder] = useState({});
+  const [cart, setCart] = useState([]); // create cart reducer and action creator
+  const [stockOrder, setStockOrder] = useState({}); // create stockOrder reducer and action creator
 
   // DELETE
   useEffect(() => {
@@ -41,11 +57,11 @@ const App = () => {
     fetchProducts();
   }, []);
 
+  // COPY, MODIFY FOR REDUX AND MOVE TO HEADER COMPONENT
   useEffect(() => {
     const fetchCart = async () => {
       try {
         const response = await axios.get("/api/cart");
-        console.log("cart", response.data);
         setCart(response.data);
         const newStockOrder = response.data.reduce((newStockOrder, item) => {
           return { ...newStockOrder, [item.productId]: item.quantity };
@@ -94,10 +110,8 @@ const App = () => {
     }
   };
 
+  //DELETE
   const updateProduct = (updatedProduct) => {
-    //DELETE
-    console.log("before", products);
-    console.log("updatedProduct", updatedProduct);
     const updatedProducts = products.map((product) => {
       if (product._id === updatedProduct._id) {
         return updatedProduct;
@@ -109,6 +123,7 @@ const App = () => {
     setProducts([...updatedProducts]);
   };
 
+  // COPY, MODIFY FOR REDUX AND MOVE TO PRODUCT COMPONENT
   const handleDeleteProduct = async (id, callback) => {
     try {
       const response = await axios.delete(`/api/products/${id}`);
@@ -122,10 +137,12 @@ const App = () => {
     }
   };
 
+  // COPY, MODIFY FOR REDUX AND MOVE TO PRODUCT COMPONENT
   const deleteProduct = (id) => {
     setProducts((products) => products.filter((product) => product._id !== id));
   };
 
+  // COPY, MODIFY FOR REDUX AND MOVE TO HEADER COMPONENT
   const handleCheckout = async () => {
     const updatedProducts = products.map((product) => {
       const orderedQuantity = stockOrder[product._id] || 0;
