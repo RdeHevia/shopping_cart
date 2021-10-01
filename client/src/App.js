@@ -26,7 +26,7 @@ STORE FULLY FUNCTIONAL
 7. clear stockOrder feature (uses CHECKOUT action)
 
 REMOVE REACT STATE:
-Start removing state and any dependencies from children all the way up to App.js. That way we ensure
+Start rewiring and removing state and any dependencies from children all the way up to App.js. That way we ensure
 the app still works while we rewire everything.
 
 1. AddProductForm
