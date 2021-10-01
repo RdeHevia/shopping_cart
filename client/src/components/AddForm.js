@@ -15,7 +15,7 @@ import { productCreated } from "../actions/productsActions";
   - (FUTURE) recycle the component (same form for add and edit product)
 */
 
-const AddForm = ({ onFormSubmission }) => {
+const AddForm = () => {
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
@@ -37,7 +37,6 @@ const AddForm = ({ onFormSubmission }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onFormSubmission({ title, price, quantity }, resetInputs); // DELETE
     handleFormSubmission({ title, price, quantity }, resetInputs);
   };
 
