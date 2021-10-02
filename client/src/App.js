@@ -6,7 +6,6 @@ import Header from "./components/Header.js";
 import Products from "./components/Products.js";
 import AddForm from "./components/AddForm.js";
 import { checkout } from "./actions/cartActions.js";
-
 /*
 
 THUNK REFACTORING (EXTRA):
@@ -15,6 +14,7 @@ THUNK REFACTORING (EXTRA):
 */
 
 const App = () => {
+  console.log(process.env.SERVER_HOST);
   return (
     <div id="app">
       <Header />
