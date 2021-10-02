@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+  client:
+    image: stephaniecunnane/shopping-cart:client
+    # build: ./client
+    ports:
+      - "3000:3000"
+    depends_on:
+      - server
+  server:
+    image: stephaniecunnane/shopping-cart:server
+    # build: ./server
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./server/.env
+    container_name: "shopping_cart_server_container"
