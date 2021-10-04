@@ -9,16 +9,8 @@ const Products = () => {
   const products = useSelector((state) => state.products);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const products = (await axios.get("/api/products")).data;
-        dispatch(productsReceived(products));
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    fetchProducts();
-  }, []);
+    dispatch(productsReceived());
+  }, [dispatch]);
 
   return (
     <div className="product-listing">
