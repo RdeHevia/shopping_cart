@@ -1,4 +1,4 @@
-version: '3.5'
+version: "3.5"
 
 services:
   shopping-cart-client:
@@ -6,7 +6,7 @@ services:
     ports:
       - 3000:3000
   shopping-cart-server:
-    image: shopping-cart-server
+    image: rdehevia90/shopping-cart-server
     build: ./server
     env_file: .env
 
